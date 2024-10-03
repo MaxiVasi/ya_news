@@ -109,4 +109,4 @@ class TestDetailPage(TestCase):
         response = self.client.get(self.detail_url)
         self.assertIn('form', response.context)
         # Проверим, что объект формы соответствует нужному классу формы.
-        self.assertIsInstance(response.context['form'], CommentForm) 
+        self.assertIsInstance(response.context['form'], CommentForm)
