@@ -26,7 +26,6 @@ USER_LOGOUT = pytest.lazy_fixture('user_logout_url')
 USER_SIGNUP = pytest.lazy_fixture('user_signup_url')
 
 
-
 @pytest.mark.django_db
 @pytest.mark.parametrize(
     'reverse_url, parametrized_client, status',
