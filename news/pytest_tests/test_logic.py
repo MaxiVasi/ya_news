@@ -31,7 +31,6 @@ def test_anonymous_cant_create_comment(client, detail_url):
 def test_author_can_create_comment(author_client, detail_url):
     """Авторизованный пользователь может создать комментарий."""
     comments_count_before = Comment.objects.count()
-    
     response = author_client.post(detail_url, data=form_data)
     assertRedirects(response, f'{detail_url}#comments')
     comments_count = Comment.objects.count()
@@ -71,11 +70,12 @@ def test_author_can_edit_comment(comment,
 @pytest.mark.django_db
 def test_author_can_delete_comment(author_client, detail_url, delete_url):
     """Авторизованный пользователь может удалять свой комментарий."""
+    comments_count_before = Comment.objects.count()
     response = author_client.delete(delete_url)
     url_to_comments = detail_url + '#comments'
     assertRedirects(response, url_to_comments)
     comments_count = Comment.objects.count()
-    assert comments_count == 0
+    assert comments_count == comments_count_before - 1
 
 
 @pytest.mark.django_db
@@ -92,7 +92,8 @@ def test_not_author_cant_edit_comment_of_author_user(
 @pytest.mark.django_db
 def test_not_author_cant_delete_comment_of_author_user(not_author_client,
                                                        delete_url):
+    comments_count_before = Comment.objects.count()
     response = not_author_client.delete(delete_url)
     assert response.status_code == HTTPStatus.NOT_FOUND
     comments_count = Comment.objects.count()
-    assert comments_count == 1
+    assert comments_count == comments_count_before
