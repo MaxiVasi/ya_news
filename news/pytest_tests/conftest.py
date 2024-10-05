@@ -6,9 +6,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 from news.models import Comment, News
-
-NEWS_COUNT_ON_HOME_PAGE = 10
-NEW_COMMENT_TEXT = 'Совсем новый текст комментария'
+from yanews.settings import NEWS_COUNT_ON_HOME_PAGE
 
 
 @pytest.fixture
@@ -74,13 +72,6 @@ def comment_multiple(news_one, author):
             author=author,)
         comment.created = now + timedelta(days=index)
         comment.save()
-
-
-@pytest.fixture
-def form_data():
-    return {
-        'text': 'Новый текст комментария',
-    }
 
 
 @pytest.fixture
