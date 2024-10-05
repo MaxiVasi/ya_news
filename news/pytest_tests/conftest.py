@@ -1,10 +1,9 @@
-import pytest
+from datetime import datetime, timedelta
 
+import pytest
 from django.test.client import Client
 from django.urls import reverse
 from django.utils import timezone
-
-from datetime import datetime, timedelta
 
 from news.models import Comment, News
 
@@ -47,13 +46,12 @@ def news_one():
 @pytest.fixture
 def news_multiple():
     today = datetime.today()
-    news = News.objects.bulk_create(
+    News.objects.bulk_create(
         News(
             title=f'Новость {index}',
             text='Просто текст новости',
             date=today - timedelta(days=index))
         for index in range(NEWS_COUNT_ON_HOME_PAGE + 1))
-    return news
 
 
 @pytest.fixture
@@ -76,17 +74,6 @@ def comment_multiple(news_one, author):
             author=author,)
         comment.created = now + timedelta(days=index)
         comment.save()
-    return comment
-
-
-@pytest.fixture
-def pk_for_one_news(news_one):
-    return (news_one.pk,)
-
-
-@pytest.fixture
-def pk_comment(comment):
-    return (comment.pk,)
 
 
 @pytest.fixture
@@ -94,6 +81,26 @@ def form_data():
     return {
         'text': 'Новый текст комментария',
     }
+
+
+@pytest.fixture
+def home_url():
+    return reverse('news:home')
+
+
+@pytest.fixture
+def user_login_url():
+    return reverse('users:login')
+
+
+@pytest.fixture
+def user_logout_url():
+    return reverse('users:logout')
+
+
+@pytest.fixture
+def user_signup_url():
+    return reverse('users:signup')
 
 
 @pytest.fixture

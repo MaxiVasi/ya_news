@@ -8,11 +8,9 @@
 
 import pytest
 from http import HTTPStatus
-from django.urls import reverse
 from pytest_django.asserts import assertRedirects, assertFormError
 
-from news.models import Comment, News
-from news.forms import CommentForm
+from news.models import Comment
 from news.forms import BAD_WORDS, WARNING
 
 NEW_COMMENT_TEXT = 'Совсем новый текст комментария'

@@ -8,10 +8,8 @@
 # комментария на странице отдельной новости, а авторизованному доступна.
 
 import pytest
-from pytest_django.asserts import assertRedirects
 
 from django.urls import reverse
-from news.forms import CommentForm
 
 from .conftest import NEWS_COUNT_ON_HOME_PAGE
 
@@ -41,9 +39,9 @@ def test_news_sorting_on_home_page(client):
 
 @pytest.mark.django_db
 @pytest.mark.usefixtures('comment_multiple')
-def test_comments_sorting_on_news_page(author_client, pk_for_one_news):
+def test_comments_sorting_on_news_page(author_client, news_one):
     """Проверка сортировки комментариев по дате создания."""
-    url = reverse('news:detail', args=pk_for_one_news)
+    url = reverse('news:detail', args=(news_one.pk,))
     response = author_client.get(url)
     news = response.context['news']
     all_comments = news.comment_set.all()
@@ -53,14 +51,14 @@ def test_comments_sorting_on_news_page(author_client, pk_for_one_news):
 
 
 @pytest.mark.django_db
-def test_anonymous_client_has_no_form(client, pk_for_one_news):
-    url = reverse('news:detail', args=pk_for_one_news)
+def test_anonymous_client_has_no_form(client, news_one):
+    url = reverse('news:detail', args=(news_one.pk,))
     response = client.get(url)
     assert 'form' not in response.context
 
 
 @pytest.mark.django_db
-def test_author_has_form_for_comment(author_client, pk_for_one_news):
-    url = reverse('news:detail', args=pk_for_one_news)
+def test_author_has_form_for_comment(author_client, news_one):
+    url = reverse('news:detail', args=(news_one.pk,))
     response = author_client.get(url)
     assert 'form' in response.context
