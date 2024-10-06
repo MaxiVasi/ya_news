@@ -26,7 +26,6 @@ USER_LOGOUT = pytest.lazy_fixture('user_logout_url')
 USER_SIGNUP = pytest.lazy_fixture('user_signup_url')
 
 
-@pytest.mark.django_db
 @pytest.mark.parametrize(
     'reverse_url, parametrized_client, status',
     (
@@ -47,7 +46,6 @@ def test_global_respond_status_check(reverse_url, parametrized_client, status):
     assert response.status_code == status
 
 
-@pytest.mark.django_db
 @pytest.mark.parametrize(
     'reverse_url, parametrized_client, user_url',
     (
@@ -62,14 +60,12 @@ def test_global_redirect_check(reverse_url, parametrized_client, user_url):
     assertRedirects(response, expected_url)
 
 
-@pytest.mark.django_db
 def test_home_availability_for_anonymous_user(client, home_url):
     """Доступность главной страницы для неавторизинованного пользователя."""
     response = client.get(home_url)
     assert response.status_code == HTTPStatus.OK
 
 
-@pytest.mark.django_db
 def test_news_pages_availability_for_anonymous_user(client, detail_url):
     """Страница отдельной новости доступна анонимному пользователю."""
     response = client.get(detail_url)
@@ -87,7 +83,6 @@ def test_pages_availability_for_anonymous_user(client, name):
     assert response.status_code == HTTPStatus.OK
 
 
-@pytest.mark.django_db
 @pytest.mark.parametrize(
     'page',
     ('news:edit', 'news:delete')
@@ -112,7 +107,6 @@ def test_pages_edit_delete_for_author_user(author_client, comment, page):
     assert response.status_code == HTTPStatus.OK
 
 
-@pytest.mark.django_db
 @pytest.mark.parametrize(
     'page',
     ('news:edit', 'news:delete')

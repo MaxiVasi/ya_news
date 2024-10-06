@@ -1,12 +1,17 @@
 from datetime import datetime, timedelta
 
 import pytest
+from django.conf import settings
 from django.test.client import Client
 from django.urls import reverse
 from django.utils import timezone
 
 from news.models import Comment, News
-from yanews.settings import NEWS_COUNT_ON_HOME_PAGE
+
+
+@pytest.fixture(autouse=True)
+def enable_db_for_all_tests(db):
+    """Все тесты используют базу."""
 
 
 @pytest.fixture
@@ -49,7 +54,7 @@ def news_multiple():
             title=f'Новость {index}',
             text='Просто текст новости',
             date=today - timedelta(days=index))
-        for index in range(NEWS_COUNT_ON_HOME_PAGE + 1))
+        for index in range(settings.NEWS_COUNT_ON_HOME_PAGE + 1))
 
 
 @pytest.fixture
